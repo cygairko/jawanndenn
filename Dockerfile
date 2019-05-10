@@ -1,4 +1,4 @@
-FROM python:2.7-stretch
+FROM python:alpine
 
 COPY setup.py README.rst  /app/
 COPY jawanndenn/  /app/jawanndenn/
