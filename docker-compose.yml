@@ -1,20 +1,24 @@
 # Copyright (C) 2018 Sebastian Pipping <sebastian@pipping.org>
 # Licensed under GNU Affero GPL v3 or later
 
-version: "3"
+version: "3.7"
 
 networks:
-  ssl-reverse-proxy:
-    external: yes
+  traefik_proxy:
+    external: true
+    name: traefik_proxy
 
 services:
   jawanndenn:
     build: .
-    ports:
-      - 127.0.0.1:54080:8080
     networks:
-      - default
-      - ssl-reverse-proxy
+      - traefik_proxy
+    labels:
+      traefik.enable: "true"
+      traefik.backend: "traefik"
+      traefik.frontend.rule: "Host:poll.${DOMAINNAME}"
+      traefik.port: "8080"
+      traefik.docker.network: "traefik_proxy"
     volumes:
       - ~/.jawanndenn-docker/:/data
-    restart: unless-stopped
+    restart: always
